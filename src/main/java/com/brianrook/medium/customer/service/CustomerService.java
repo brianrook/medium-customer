@@ -15,7 +15,7 @@ public class CustomerService {
     @Autowired
     CustomerDAO customerDAO;
 
-    Customer saveCustomer(Customer customer) {
+    public Customer saveCustomer(Customer customer) {
         return persistCustomer(customer);
     }
 
