@@ -1,0 +1,48 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-customer-table
+      author: brianrook
+      changes:
+        - createTable:
+            catalogName: medium
+            tableName: customer
+            columns:
+              - column:
+                  name: customer_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone_number
+                  type: varchar(20)
+              - column:
+                  name: email
+                  type: varchar(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: create_timestamp
+                  type: timestamp
+                  constraints:
+                    nullable: false
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: modify_timestamp
+                  type: timestamp
+                  constraints:
+                    nullable: false
+                  defaultValueComputed: CURRENT_TIMESTAMP
+        - createSequence:
+            sequenceName: customer_seq
+            incrementBy: 1
