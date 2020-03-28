@@ -19,7 +19,7 @@ public class CustomerService {
         return persistCustomer(customer);
     }
 
-    private Customer persistCustomer(Customer customer) {
+    public Customer persistCustomer(Customer customer) {
         CustomerEntity customerEntity = CustomerEntityMapper.INSTANCE.customerToCustomerEntity(customer);
         CustomerEntity storedEntity = customerDAO.save(customerEntity);
         Customer returnCustomer = CustomerEntityMapper.INSTANCE.customerEntityToCustomer(storedEntity);
