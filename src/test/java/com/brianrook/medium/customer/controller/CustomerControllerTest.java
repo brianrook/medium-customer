@@ -42,7 +42,7 @@ public class CustomerControllerTest {
     }
 
     @Test
-    public void testAddEmployeeSuccess() throws URISyntaxException
+    public void testAddCustomerSuccess() throws URISyntaxException
     {
         RestTemplate restTemplate = new RestTemplate();
         String baseUrl = "http://localhost:"+randomServerPort+customerPath;
