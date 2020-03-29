@@ -51,7 +51,7 @@ public class CustomerControllerTest {
                 .firstName("test")
                 .lastName("user")
                 .email("test.user@test.com")
-                .phoneNumber("123-654-7890")
+                .phoneNumber("(123)654-7890")
                 .build();
 
         HttpHeaders headers = new HttpHeaders();
