@@ -43,9 +43,11 @@ public class LoggingAspect {
                                               Object result, long totalTimeMillis) {
         try {
             MethodSignature methodSignature = (MethodSignature) proceedingJoinPoint.getSignature();
+            String className = methodSignature.getDeclaringType().getSimpleName();
             String methodName = methodSignature.getName();
-            ObjectWriter writer = om.writerWithDefaultPrettyPrinter();
-            log.info("\n<- {} returns \n{}}\nExecution time: {}ms",
+            ObjectWriter writer = om.writer();
+            log.info("<- {}.{} returns:{}.  Execution time: {}ms",
+                    className,
                     methodName,
                     writer.writeValueAsString(result),
                     totalTimeMillis);
@@ -65,11 +67,13 @@ public class LoggingAspect {
                     params.put(argNames[i], values[i]);
                 }
             }
-
-            log.info("-> method " + jp.getSignature().getName() + " invocation", true);
-
-            ObjectWriter writer = om.writerWithDefaultPrettyPrinter();
-            if (!params.isEmpty()) log.info(writer.writeValueAsString(params));
+            ObjectWriter writer = om.writer();
+            String className = jp.getSignature().getDeclaringType().getSimpleName();
+            String methodName = jp.getSignature().getName();
+            log.info("-> {}.{} invocation.  params: {}",
+                    className,
+                    methodName,
+                    writer.writeValueAsString(params));
         } catch (JsonProcessingException e) {
             log.error("unable to write log value: {}", e.getMessage(), e);
         }
