@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
 import java.net.URISyntaxException;
 
 @Controller
@@ -27,7 +28,7 @@ public class CustomerController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CustomerDTO> saveCustomer(
-            @RequestBody CustomerDTO customerDTO) throws URISyntaxException {
+            @RequestBody @Valid CustomerDTO customerDTO) throws URISyntaxException {
         Customer customer = CustomerDTOMapper.INSTANCE.customerDTOToCustomer(customerDTO);
 
         Customer savedCustomer = customerService.saveCustomer(customer);
