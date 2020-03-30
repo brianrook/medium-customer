@@ -1,4 +1,4 @@
-package com.brianrook.medium.customer.controller;
+package com.brianrook.medium.customer.config;
 
 import com.brianrook.medium.customer.exception.CustomerSystemException;
 import org.springframework.http.HttpHeaders;

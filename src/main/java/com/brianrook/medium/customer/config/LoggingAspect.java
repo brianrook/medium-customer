@@ -24,7 +24,7 @@ public class LoggingAspect {
 
     @Around("execution(* com.brianrook.medium.customer..*(..)) " +
             "&& !within(com.brianrook.medium.customer.config. .*)" +
-            "&& !within(com.brianrook.medium.customer.controller.CustomerControllerAdvice)) ")
+            "&& !within(com.brianrook.medium.customer.config.CustomerControllerAdvice)) ")
     public Object profileAllMethods(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         logMethodInvocationAndParameters(proceedingJoinPoint);
 
