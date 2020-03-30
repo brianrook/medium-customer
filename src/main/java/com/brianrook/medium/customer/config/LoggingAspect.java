@@ -3,6 +3,7 @@ package com.brianrook.medium.customer.config;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -11,7 +12,6 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
-import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +22,9 @@ public class LoggingAspect {
 
     ObjectMapper om = new ObjectMapper();
 
-    @Around("execution(* com.brianrook.medium.customer..*(..)))")
+    @Around("execution(* com.brianrook.medium.customer..*(..)) " +
+            "&& !within(com.brianrook.medium.customer.config. .*)" +
+            "&& !within(com.brianrook.medium.customer.controller.CustomerControllerAdvice)) ")
     public Object profileAllMethods(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         logMethodInvocationAndParameters(proceedingJoinPoint);
 
@@ -46,11 +48,13 @@ public class LoggingAspect {
             String className = methodSignature.getDeclaringType().getSimpleName();
             String methodName = methodSignature.getName();
             ObjectWriter writer = om.writer();
-            log.info("<- {}.{} returns:{}.  Execution time: {}ms",
-                    className,
-                    methodName,
-                    writer.writeValueAsString(result),
-                    totalTimeMillis);
+            if (writer != null) {
+                log.info("<- {}.{} returns:{}.  Execution time: {}ms",
+                        className,
+                        methodName,
+                        writer.writeValueAsString(result),
+                        totalTimeMillis);
+            }
         } catch (JsonProcessingException e) {
             log.error("unable to write log value: {}", e.getMessage(), e);
         }
@@ -68,12 +72,14 @@ public class LoggingAspect {
                 }
             }
             ObjectWriter writer = om.writer();
-            String className = jp.getSignature().getDeclaringType().getSimpleName();
-            String methodName = jp.getSignature().getName();
-            log.info("-> {}.{} invocation.  params: {}",
-                    className,
-                    methodName,
-                    writer.writeValueAsString(params));
+            if (writer!=null) {
+                String className = jp.getSignature().getDeclaringType().getSimpleName();
+                String methodName = jp.getSignature().getName();
+                log.info("-> {}.{} invocation.  params: {}",
+                        className,
+                        methodName,
+                        writer.writeValueAsString(params));
+            }
         } catch (JsonProcessingException e) {
             log.error("unable to write log value: {}", e.getMessage(), e);
         }

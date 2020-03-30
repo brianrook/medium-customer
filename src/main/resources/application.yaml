@@ -1,5 +1,13 @@
 server:
   port: 10000
+  tomcat:
+    accesslog:
+      enabled: true
+      pattern: '%h %l %u %t \"%r\" %s %b zipkin:[%{X-B3-TraceId}i, %{X-B3-SpanId}i, %{X-B3-ParentSpanId}i]'
+      directory: c:\workspace\logs\customer
+      prefix: access_log
+      suffix: .log
+      buffered: false
 spring:
   application:
     name: customer
