@@ -20,6 +20,7 @@
 		<org.mapstruct.version>1.3.1.Final</org.mapstruct.version>
 		<springdoc-openapi-core.version>1.1.49</springdoc-openapi-core.version>
 		<jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
+		<jib-maven-plugin.version>2.0.0</jib-maven-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -147,6 +148,22 @@
 						<exclude>com/brianrook/medium/customer/*Application*</exclude>
 						<exclude>com/brianrook/medium/customer/exception/**/*</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+			<!-- build docker image -->
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>${jib-maven-plugin.version}</version>
+				<configuration>
+					<to>
+						<image>medium/${project.artifactId}</image>
+					</to>
+					<container>
+						<jvmFlags>
+							<jvmFlag>-Djava.security.egd=file:/dev/./urandom</jvmFlag>
+						</jvmFlags>
+					</container>
 				</configuration>
 			</plugin>
 		</plugins>
