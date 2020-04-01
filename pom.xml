@@ -150,22 +150,6 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<!-- build docker image -->
-			<plugin>
-				<groupId>com.google.cloud.tools</groupId>
-				<artifactId>jib-maven-plugin</artifactId>
-				<version>${jib-maven-plugin.version}</version>
-				<configuration>
-					<to>
-						<image>medium/${project.artifactId}</image>
-					</to>
-					<container>
-						<jvmFlags>
-							<jvmFlag>-Djava.security.egd=file:/dev/./urandom</jvmFlag>
-						</jvmFlags>
-					</container>
-				</configuration>
-			</plugin>
 		</plugins>
 
 	</build>
