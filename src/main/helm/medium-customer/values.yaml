@@ -1,4 +1,4 @@
-# Default values for attendee.
+# Default values for customer.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: r.cfcr.io/docketdynamics/medium-customer
-  tag: latest
+  tag: 353eba6
   pullPolicy: IfNotPresent
 
 nameOverride: ""
@@ -55,6 +55,18 @@ spring:
 containerPort: 8080
 
 extraEnv: {}
+
+secretsToEnv:
+  - name: SPRING_DATASOURCE_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: database-secrets
+        key: SPRING_DATASOURCE_PASSWORD
+  - name: SPRING_DATASOURCE_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: database-secrets
+        key: SPRING_DATASOURCE_USERNAME
 
 securityContext: {}
 

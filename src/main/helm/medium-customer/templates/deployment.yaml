@@ -22,6 +22,8 @@ spec:
       annotations:
         {{ toYaml .Values.podAnnotations | indent 8 }}
     spec:
+      imagePullSecrets:
+        - name: regcred
       serviceAccountName: {{ template "spring.serviceAccountName" . }}
       securityContext:
         {{ toYaml .Values.securityContext | indent 8 }}
@@ -50,6 +52,9 @@ spec:
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
+{{- if .Values.secretsToEnv }}
+{{ toYaml .Values.secretsToEnv | indent 12 }}
+{{- end }}
           volumeMounts:
             - name: data
               mountPath: /data
