@@ -6,8 +6,8 @@ replicaCount: 1
 
 image:
   repository: r.cfcr.io/docketdynamics/medium-customer
-  tag: 353eba6
-  pullPolicy: IfNotPresent
+  tag: test
+  pullPolicy: Always
 
 nameOverride: ""
 fullnameOverride: ""
