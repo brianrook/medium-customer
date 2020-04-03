@@ -52,6 +52,9 @@ spec:
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
+{{- if .Values.secretsToEnv }}
+{{ toYaml .Values.secretsToEnv | indent 12 }}
+{{- end }}
           volumeMounts:
             - name: data
               mountPath: /data
