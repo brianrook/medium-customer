@@ -1,0 +1,20 @@
+@startuml
+participant "Client" as client
+participant "Controller" as ctrl
+participant "Service" as svc
+participant "DAO" as dao
+participant "Publisher" as publish
+
+client -> ctrl : create customer
+ctrl -> svc : create customer
+svc -> dao : get customer by email
+alt customer does not exist
+    svc -> dao : create customer
+    svc -> publish : create customer event
+    svc -> ctrl : return created customer
+    ctrl-> client : 201: return created customer
+else customer exists
+    svc -> ctrl : exception: customer exists
+    ctrl -> client : 409 conflict
+end
+@enduml
