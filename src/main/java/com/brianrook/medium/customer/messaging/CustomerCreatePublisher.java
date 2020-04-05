@@ -1,5 +1,6 @@
 package com.brianrook.medium.customer.messaging;
 
+import com.brianrook.medium.customer.config.CustomerCreateBinding;
 import com.brianrook.medium.customer.messaging.mapper.CustomerMessageMapper;
 import com.brianrook.medium.customer.messaging.message.CustomerCreatedMessage;
 import com.brianrook.medium.customer.service.model.Customer;

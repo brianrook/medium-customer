@@ -21,7 +21,7 @@ spring:
           destination: queue.customer.create
           content-type: application/json
   rabbitmq:
-    addresses: amqp://shrimp.rmq.cloudamqp.com/cyicbovj
+    addresses: amqp://shrimp.rmq.cloudamqp.com/hoztpuxa
 ---
 spring:
   profiles: herokudb

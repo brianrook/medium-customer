@@ -12,7 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @Slf4j
@@ -25,8 +28,7 @@ public class CustomerService {
     CustomerCreatePublisher customerCreatePublisher;
 
     public Customer saveCustomer(Customer customer) {
-        if (customerExists(customer))
-        {
+        if (customerExists(customer)) {
             throw new CreateCustomerException(String.format("customer with email: %s already exists", customer.getEmail()));
         }
         Customer savedCustomer = persistCustomer(customer);
@@ -45,18 +47,26 @@ public class CustomerService {
             CustomerEntity storedEntity = customerDAO.save(customerEntity);
             Customer returnCustomer = CustomerEntityMapper.INSTANCE.customerEntityToCustomer(storedEntity);
             return returnCustomer;
-        }catch (DataAccessException e){
-            throw new CustomerSystemException("unable to persist customer data: "+e.getMessage(), e);
+        } catch (DataAccessException e) {
+            throw new CustomerSystemException("unable to persist customer data: " + e.getMessage(), e);
         }
     }
 
 
     public Optional<Customer> getCustomerById(Long id) {
         Optional<CustomerEntity> customerEntityOptional = customerDAO.findById(id);
-        if (customerEntityOptional.isPresent()){
+        if (customerEntityOptional.isPresent()) {
             return Optional.of(CustomerEntityMapper.INSTANCE.customerEntityToCustomer(customerEntityOptional.get()));
         } else {
             return Optional.empty();
         }
+    }
+
+    public List<Customer> getAllCustomers() {
+        Iterable<CustomerEntity> customerEntityList = customerDAO.findAll();
+        List<CustomerEntity> customerEntities = StreamSupport.stream(customerEntityList.spliterator(), false)
+                .collect(Collectors.toList());
+        List<Customer> customerList = CustomerEntityMapper.INSTANCE.customerEntityListToCustomerList(customerEntities);
+        return customerList;
     }
 }

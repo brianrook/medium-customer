@@ -3,7 +3,7 @@ package com.brianrook.medium.customer.test.controller;
 import com.brianrook.medium.customer.controller.dto.CustomerDTO;
 import com.brianrook.medium.customer.dao.CustomerDAO;
 import com.brianrook.medium.customer.dao.entity.CustomerEntity;
-import com.brianrook.medium.customer.messaging.CustomerCreateBinding;
+import com.brianrook.medium.customer.config.CustomerCreateBinding;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,14 +18,12 @@ import org.springframework.cloud.stream.test.binder.MessageCollector;
 import org.springframework.dao.QueryTimeoutException;
 import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;

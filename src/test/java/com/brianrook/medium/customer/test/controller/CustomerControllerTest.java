@@ -3,7 +3,7 @@ package com.brianrook.medium.customer.test.controller;
 import com.brianrook.medium.customer.controller.dto.CustomerDTO;
 import com.brianrook.medium.customer.dao.CustomerDAO;
 import com.brianrook.medium.customer.dao.entity.CustomerEntity;
-import com.brianrook.medium.customer.messaging.CustomerCreateBinding;
+import com.brianrook.medium.customer.config.CustomerCreateBinding;
 import com.brianrook.medium.customer.messaging.message.CustomerCreatedMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.cloud.stream.test.binder.MessageCollector;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.messaging.Message;
 import org.springframework.test.context.ActiveProfiles;
@@ -26,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -196,4 +198,55 @@ public class CustomerControllerTest {
         assertNull(customerDTO);
     }
 
+    @Test
+    public void testGetAllCustomerSuccess() throws URISyntaxException {
+        //given
+        CustomerEntity savedRecord = CustomerEntity.builder()
+                .firstName("test")
+                .lastName("user")
+                .email("test.user@test.com")
+                .phoneNumber("(123)654-7890")
+                .build();
+        CustomerEntity savedCustomer = customerDAO.save(savedRecord);
+        CustomerEntity savedRecord1 = CustomerEntity.builder()
+                .firstName("test1")
+                .lastName("user1")
+                .email("test1.user1@test.com")
+                .phoneNumber("(123)654-7890")
+                .build();
+        CustomerEntity savedCustomer1 = customerDAO.save(savedRecord1);
+
+
+        //when
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        HttpEntity<CustomerDTO> request = new HttpEntity<>(headers);
+        RestTemplate restTemplate = new RestTemplate();
+        String baseUrl = "http://localhost:" + randomServerPort + customerPath + "all";
+        URI uri = new URI(baseUrl);
+
+        ResponseEntity<List<CustomerDTO>> result = restTemplate.exchange(
+                uri,
+                HttpMethod.GET,
+                request,
+                new ParameterizedTypeReference<List<CustomerDTO>>() {
+                });
+
+        //then
+        List<CustomerDTO> customerDTOList = result.getBody();
+        //Verify request succeed
+        Assertions.assertEquals(200, result.getStatusCodeValue());
+        assertEquals(2, customerDTOList.size());
+        assertEquals(savedRecord.getCustomerId(), customerDTOList.get(0).getCustomerId());
+        assertEquals(savedRecord.getEmail(), customerDTOList.get(0).getEmail());
+        assertEquals(savedRecord.getFirstName(), customerDTOList.get(0).getFirstName());
+        assertEquals(savedRecord.getLastName(), customerDTOList.get(0).getLastName());
+        assertEquals(savedRecord.getPhoneNumber(), customerDTOList.get(0).getPhoneNumber());
+
+        assertEquals(savedRecord1.getCustomerId(), customerDTOList.get(1).getCustomerId());
+        assertEquals(savedRecord1.getEmail(), customerDTOList.get(1).getEmail());
+        assertEquals(savedRecord1.getFirstName(), customerDTOList.get(1).getFirstName());
+        assertEquals(savedRecord1.getLastName(), customerDTOList.get(1).getLastName());
+        assertEquals(savedRecord1.getPhoneNumber(), customerDTOList.get(1).getPhoneNumber());
+    }
 }

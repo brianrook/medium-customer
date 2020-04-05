@@ -10,6 +10,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
@@ -17,18 +18,18 @@ import org.springframework.util.StopWatch;
 import java.util.HashMap;
 import java.util.Map;
 
-@Aspect
-@Component
+//@Aspect
+//@Configuration
 @Slf4j
-@Configurable
-@Profile("!test")
+//@Profile("!test")
 public class LoggingAspect {
 
     ObjectMapper om = new ObjectMapper();
 
-    @Around("execution(* com.brianrook.medium.customer..*(..)) " +
-            "&& !within(com.brianrook.medium.customer.config. .*)" +
-            "&& !within(com.brianrook.medium.customer.config.CustomerControllerAdvice)) ")
+    @Around("within(com.brianrook.medium.customer.controller. .*) " +
+            "&& within(com.brianrook.medium.customer.service. .*) " +
+            "&& within(com.brianrook.medium.customer.messaging. .*) " +
+            "&& within(com.brianrook.medium.customer.dao. .*) ) ")
     public Object profileAllMethods(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         logMethodInvocationAndParameters(proceedingJoinPoint);
 

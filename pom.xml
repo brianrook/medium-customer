@@ -18,7 +18,7 @@
 		<java.version>11</java.version>
 		<spring-cloud.version>Hoxton.SR3</spring-cloud.version>
 		<org.mapstruct.version>1.3.1.Final</org.mapstruct.version>
-		<springdoc-openapi-core.version>1.1.49</springdoc-openapi-core.version>
+		<springdoc-openapi-core.version>1.3.0</springdoc-openapi-core.version>
 		<jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
 		<jib-maven-plugin.version>2.0.0</jib-maven-plugin.version>
 	</properties>
@@ -44,7 +44,14 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-stream</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-stream-rabbit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-stream-binder-rabbit</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>

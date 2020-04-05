@@ -39,9 +39,6 @@ spring:
       spring:
         application:
           name: customer
-        jackson:
-            deserialization:
-              FAIL_ON_UNKNOWN_PROPERTIES: false
         datasource:
           hikari:
             connectionTimeout: 20000
@@ -54,7 +51,7 @@ spring:
                 destination: queue.customer.create
                 content-type: application/json
         rabbitmq:
-          addresses: amqp://shrimp.rmq.cloudamqp.com/cyicbovj
+          addresses: amqp://shrimp.rmq.cloudamqp.com/hoztpuxa
     ## An optional secret that contains a base64 encoded YAML file to be loaded in
     ## for passwords and other secrets, by default `/config/secret.yml`
     ## this secret must only have a single key of `secret.yml: |-`.
