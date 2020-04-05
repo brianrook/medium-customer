@@ -68,6 +68,16 @@ secretsToEnv:
       secretKeyRef:
         name: database-secrets
         key: SPRING_DATASOURCE_USERNAME
+  - name: SPRING_RABBITMQ_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: amqp-secrets
+        key: SPRING_RABBITMQ_PASSWORD
+  - name: SPRING_RABBITMQ_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: amqp-secrets
+        key: SPRING_RABBITMQ_USERNAME
 
 securityContext: {}
 

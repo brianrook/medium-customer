@@ -14,6 +14,14 @@ spring:
   jackson:
     deserialization:
       FAIL_ON_UNKNOWN_PROPERTIES: false
+  cloud:
+    stream:
+      bindings:
+        output:
+          destination: queue.customer.create
+          content-type: application/json
+  rabbitmq:
+    addresses: amqp://shrimp.rmq.cloudamqp.com/cyicbovj
 ---
 spring:
   profiles: herokudb
