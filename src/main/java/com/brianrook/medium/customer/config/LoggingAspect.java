@@ -3,14 +3,11 @@ package com.brianrook.medium.customer.config;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
@@ -18,18 +15,17 @@ import org.springframework.util.StopWatch;
 import java.util.HashMap;
 import java.util.Map;
 
-//@Aspect
-//@Configuration
+@Aspect
+@Component
 @Slf4j
-//@Profile("!test")
+@Profile("!test")
 public class LoggingAspect {
 
     ObjectMapper om = new ObjectMapper();
 
-    @Around("within(com.brianrook.medium.customer.controller. .*) " +
-            "&& within(com.brianrook.medium.customer.service. .*) " +
-            "&& within(com.brianrook.medium.customer.messaging. .*) " +
-            "&& within(com.brianrook.medium.customer.dao. .*) ) ")
+    @Around("execution(* com.brianrook.medium.customer..*(..)) " +
+            "&& !within(com.brianrook.medium.customer.config. .*)" +
+            "&& !within(com.brianrook.medium.customer.config.CustomerControllerAdvice)) ")
     public Object profileAllMethods(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         logMethodInvocationAndParameters(proceedingJoinPoint);
 
