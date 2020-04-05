@@ -47,6 +47,14 @@ spring:
             connectionTimeout: 20000
             maximumPoolSize: 2
           url: jdbc:postgresql://ec2-52-23-14-156.compute-1.amazonaws.com:5432/df8ifk9f7jceoe
+        cloud:
+          stream:
+            bindings:
+              output:
+                destination: queue.customer.create
+                content-type: application/json
+        rabbitmq:
+          addresses: amqp://shrimp.rmq.cloudamqp.com/cyicbovj
     ## An optional secret that contains a base64 encoded YAML file to be loaded in
     ## for passwords and other secrets, by default `/config/secret.yml`
     ## this secret must only have a single key of `secret.yml: |-`.
