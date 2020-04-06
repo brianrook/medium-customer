@@ -1,5 +1,6 @@
 package com.brianrook.medium.customer.service;
 
+import com.brianrook.medium.customer.config.LoggingEnabled;
 import com.brianrook.medium.customer.dao.CustomerDAO;
 import com.brianrook.medium.customer.dao.entity.CustomerEntity;
 import com.brianrook.medium.customer.dao.mapper.CustomerEntityMapper;
@@ -19,6 +20,7 @@ import java.util.stream.StreamSupport;
 
 @Service
 @Slf4j
+@LoggingEnabled
 public class CustomerService {
 
     @Autowired

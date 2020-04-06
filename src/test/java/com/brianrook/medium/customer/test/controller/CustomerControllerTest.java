@@ -212,7 +212,7 @@ public class CustomerControllerTest {
                 .firstName("test1")
                 .lastName("user1")
                 .email("test1.user1@test.com")
-                .phoneNumber("(123)654-7890")
+                .phoneNumber("(123)654-1234")
                 .build();
         CustomerEntity savedCustomer1 = customerDAO.save(savedRecord1);
 

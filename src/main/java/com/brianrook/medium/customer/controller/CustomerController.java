@@ -1,5 +1,6 @@
 package com.brianrook.medium.customer.controller;
 
+import com.brianrook.medium.customer.config.LoggingEnabled;
 import com.brianrook.medium.customer.controller.dto.CustomerDTO;
 import com.brianrook.medium.customer.controller.mapper.CustomerDTOMapper;
 import com.brianrook.medium.customer.exception.CreateCustomerException;
@@ -20,6 +21,7 @@ import java.util.Optional;
 @Controller
 @RequestMapping(value = "/customer")
 @Slf4j
+@LoggingEnabled
 public class CustomerController {
     @Autowired
     private CustomerService customerService;
