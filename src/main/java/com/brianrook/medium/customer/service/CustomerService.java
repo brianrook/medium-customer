@@ -1,23 +1,46 @@
 package com.brianrook.medium.customer.service;
 
+import com.brianrook.medium.customer.config.LoggingEnabled;
 import com.brianrook.medium.customer.dao.CustomerDAO;
 import com.brianrook.medium.customer.dao.entity.CustomerEntity;
 import com.brianrook.medium.customer.dao.mapper.CustomerEntityMapper;
+import com.brianrook.medium.customer.exception.CreateCustomerException;
 import com.brianrook.medium.customer.exception.CustomerSystemException;
+import com.brianrook.medium.customer.messaging.CustomerCreatePublisher;
 import com.brianrook.medium.customer.service.model.Customer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @Slf4j
+@LoggingEnabled
 public class CustomerService {
 
     @Autowired
     CustomerDAO customerDAO;
 
+    @Autowired
+    CustomerCreatePublisher customerCreatePublisher;
+
     public Customer saveCustomer(Customer customer) {
-        return persistCustomer(customer);
+        if (customerExists(customer)) {
+            throw new CreateCustomerException(String.format("customer with email: %s already exists", customer.getEmail()));
+        }
+        Customer savedCustomer = persistCustomer(customer);
+        customerCreatePublisher.publishCustomerCreate(savedCustomer);
+
+        return savedCustomer;
+    }
+
+    private boolean customerExists(Customer customer) {
+        return customerDAO.findByEmail(customer.getEmail()).isPresent();
     }
 
     public Customer persistCustomer(Customer customer) {
@@ -26,10 +49,26 @@ public class CustomerService {
             CustomerEntity storedEntity = customerDAO.save(customerEntity);
             Customer returnCustomer = CustomerEntityMapper.INSTANCE.customerEntityToCustomer(storedEntity);
             return returnCustomer;
-        }catch (Exception e){
-            throw new CustomerSystemException("unable to persist customer data: "+e.getMessage(), e);
+        } catch (DataAccessException e) {
+            throw new CustomerSystemException("unable to persist customer data: " + e.getMessage(), e);
         }
     }
 
 
+    public Optional<Customer> getCustomerById(Long id) {
+        Optional<CustomerEntity> customerEntityOptional = customerDAO.findById(id);
+        if (customerEntityOptional.isPresent()) {
+            return Optional.of(CustomerEntityMapper.INSTANCE.customerEntityToCustomer(customerEntityOptional.get()));
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public List<Customer> getAllCustomers() {
+        Iterable<CustomerEntity> customerEntityList = customerDAO.findAll();
+        List<CustomerEntity> customerEntities = StreamSupport.stream(customerEntityList.spliterator(), false)
+                .collect(Collectors.toList());
+        List<Customer> customerList = CustomerEntityMapper.INSTANCE.customerEntityListToCustomerList(customerEntities);
+        return customerList;
+    }
 }

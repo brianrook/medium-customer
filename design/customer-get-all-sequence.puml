@@ -1,0 +1,17 @@
+@startuml
+participant "Client" as client
+participant "Controller" as ctrl
+participant "Service" as svc
+participant "DAO" as dao
+
+client->ctrl: get all customers
+ctrl->svc: get all customers
+svc->dao: get all customers
+alt customers exist
+    svc->ctrl: return customers
+    ctrl->client: 200: return customers
+else customers do not exist
+    svc->ctrl: return null
+    ctrl->client: 200: empty response
+end
+@enduml

@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
@@ -22,9 +23,10 @@ public class LoggingAspect {
 
     ObjectMapper om = new ObjectMapper();
 
-    @Around("execution(* com.brianrook.medium.customer..*(..)) " +
-            "&& !within(com.brianrook.medium.customer.config. .*)" +
-            "&& !within(com.brianrook.medium.customer.config.CustomerControllerAdvice)) ")
+    @Pointcut("within(@com.brianrook.medium.customer.config.LoggingEnabled *)")
+    public void loggingEnabled() {};
+
+    @Around("loggingEnabled()")
     public Object profileAllMethods(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         logMethodInvocationAndParameters(proceedingJoinPoint);
 

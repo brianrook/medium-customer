@@ -6,6 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import javax.annotation.Generated;
+import java.util.List;
 
 @Mapper
 @Generated("mapstruct")
@@ -14,4 +15,6 @@ public interface CustomerEntityMapper {
 
     CustomerEntity customerToCustomerEntity(Customer customer);
     Customer customerEntityToCustomer(CustomerEntity customerEntity);
+
+    List<Customer> customerEntityListToCustomerList(List<CustomerEntity> customerEntities);
 }
