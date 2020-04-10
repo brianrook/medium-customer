@@ -18,6 +18,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @Controller
 @RequestMapping(value = "/customer")
 @Slf4j

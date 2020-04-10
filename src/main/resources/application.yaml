@@ -25,7 +25,10 @@ spring:
 ---
 spring:
   profiles: herokudb
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   datasource:
+    driver-class-name: org.postresql.Driver
     hikari:
       connectionTimeout: 20000
       maximumPoolSize: 2
